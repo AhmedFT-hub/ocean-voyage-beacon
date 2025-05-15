@@ -17,6 +17,7 @@ import { Package, FileText } from "lucide-react";
 import { TrackingFormData } from "@/types";
 import { Link } from "react-router-dom";
 import { formatDate, getStatusColor } from "@/lib/mock-data";
+import { toast } from "sonner";
 
 const TrackingPage = () => {
   const { carriers, shipments, trackShipment, isLoading } = useShipments();
@@ -28,9 +29,19 @@ const TrackingPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!trackingNumber.trim()) {
+      toast.error("Please enter a tracking number");
+      return;
+    }
+
+    if (!carrierScac) {
+      toast.error("Please select a carrier");
+      return;
+    }
+    
     const formData: TrackingFormData = {
       trackingType,
-      trackingNumber,
+      trackingNumber: trackingNumber.trim(),
       carrierScac,
     };
     
@@ -92,7 +103,6 @@ const TrackingPage = () => {
                       value={trackingNumber}
                       onChange={(e) => setTrackingNumber(e.target.value)}
                       className="bg-white"
-                      required
                     />
                   </div>
                   
@@ -100,7 +110,7 @@ const TrackingPage = () => {
                     <label htmlFor="carrier" className="text-sm font-medium block mb-2">
                       Carrier
                     </label>
-                    <Select value={carrierScac} onValueChange={setCarrierScac} required>
+                    <Select value={carrierScac} onValueChange={setCarrierScac}>
                       <SelectTrigger id="carrier" className="bg-white">
                         <SelectValue placeholder="Select carrier" />
                       </SelectTrigger>
@@ -118,7 +128,7 @@ const TrackingPage = () => {
                 <div className="flex justify-end mt-6">
                   <Button 
                     type="submit" 
-                    disabled={isLoading || !trackingNumber || !carrierScac}
+                    disabled={isLoading}
                     className="bg-ocean-600 hover:bg-ocean-700 min-w-[120px]"
                   >
                     {isLoading ? (
