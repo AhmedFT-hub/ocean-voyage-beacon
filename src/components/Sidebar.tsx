@@ -26,7 +26,8 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 const Sidebar = () => {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
   const location = useLocation();
   const { user } = useAuth();
   const { unreadAlertCount } = useShipments();
@@ -77,7 +78,7 @@ const Sidebar = () => {
         "border-r bg-sidebar transition-all duration-300 ease-in-out",
         collapsed ? "w-[64px]" : "w-60"
       )}
-      collapsible
+      collapsible="icon"
     >
       <div className="flex items-center h-16 px-2 border-b">
         <div 

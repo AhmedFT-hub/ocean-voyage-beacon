@@ -122,6 +122,19 @@ interface AlertItemProps {
 }
 
 const AlertItem: React.FC<AlertItemProps> = ({ alert, onDismiss }) => {
+  const renderAlertIcon = (type: string) => {
+    switch (type) {
+      case 'delay':
+        return <Clock className="h-5 w-5 text-yellow-500" />;
+      case 'exception':
+        return <AlertTriangle className="h-5 w-5 text-red-500" />;
+      case 'deviation':
+        return <Bell className="h-5 w-5 text-blue-500" />;
+      default:
+        return <Bell className="h-5 w-5 text-gray-500" />;
+    }
+  };
+
   return (
     <div className={`py-4 ${alert.read ? 'opacity-70' : ''}`}>
       <div className="flex items-start justify-between">
